@@ -1,0 +1,27 @@
+{
+  "name": "archive-ona",
+  "version": "1.0.0",
+  "description": "a full database for ona-assuree",
+  "main": "app.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fritzjeune/archive-ona.git"
+  },
+  "author": "fritz jeune",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fritzjeune/archive-ona/issues"
+  },
+  "homepage": "https://github.com/fritzjeune/archive-ona#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.1",
+    "nodemon": "^2.0.2"
+  }
+}
