@@ -1,0 +1,23 @@
+path : ona/archives/api/v1/assurees
+descr: list all assurees
+method : get
+
+path : ona/archives/api/v1/assurees/:id
+descr: get a single assuree data
+method : get
+
+path : ona/archives/api/v1/assurees/:enterpriseId
+descr: list all assurees
+method : get
+
+path : ona/archives/api/v1/assurees
+descr: create a new assuree
+method : post
+
+path : ona/archives/api/v1/assurees/:id
+descr: update an assuree data
+method : put
+
+path : ona/archives/api/v1/assurees/:id
+descr: delete all data for an assuree
+method : delete
