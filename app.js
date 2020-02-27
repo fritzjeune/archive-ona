@@ -2,6 +2,12 @@
 
 const express = require("express");
 const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+
+//load env files 
+dotenv.config({ path: '.config/config.env'});
+
+connectDB();
 
 // routes files 
 const assurees = require('./routes/assurees');
@@ -20,13 +26,17 @@ app.use(logger);
 app.use('/archives/api/v1/assurees', assurees);
 
 
-//load env files 
-dotenv.config({ path: '.config/config.env'});
-
 const PORT = process.env.PORT || 3030;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}!`);
+});
+
+//handle unhandle promise rejections
+process.on('unhandledRejection', (err, promise) => {
+    console.log(`Error: ${err.message}`);
+    //close the server and exit process
+    server.close(() => process.exit(1));
 });
 
  
