@@ -1,24 +1,34 @@
 // jshint esversion:9
+const Assuree = require('../models/Assurees');
 
 // @descr       Get all ona Assurees
 // @route       GET /archives/api/v1/assurees
 // @access      Public
-exports.getAssurees = (req, res, next) => {
+exports.getAssurees = async (req, res, next) => {
+    const assurees = await Assuree.find();
+
+    console.log(assurees);
+
     res.status(200).json({
         success: true,
-        message: "get a list of all ona assurees"
+        message: "successfullly get all assurees",
+        data: assurees
     });
 
-    // next();
 };
 
 // @descr       Get a single ona assure
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
-exports.getAssuree = (req, res, next) => {
+exports.getAssuree = async (req, res, next) => {
+    const assurees = await Assuree.find();
+
+    console.log(assurees);
+
     res.status(200).json({
         success: true,
-        message: "get a single ona assuree"
+        message: "successfullly get all assurees",
+        data: assurees
     });
 
 };
@@ -26,11 +36,22 @@ exports.getAssuree = (req, res, next) => {
 // @descr       Create a new ona Assuree
 // @route       POST /archives/api/v1/assurees
 // @access      Private
-exports.createAssuree = (req, res, next) => {
-    res.status(200).json({
-        success: true,
-        message: "Create a new ona Assuree"
-    });
+exports.createAssuree = async (req, res, next) => {
+    try {
+        const assuree = await Assuree.create(req.body);
+        res.status(201).json({
+            message: "Assuree created sucessfully",
+            success: true,
+            data: assuree
+        });
+    } catch (error) {
+        // console.log(error);
+        res.status(400).json({
+            success: false,
+            message: error.errmsg
+        });
+    }
+    
 };
 
 // @descr       Update an ona Assuree

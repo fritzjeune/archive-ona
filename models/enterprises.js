@@ -1,6 +1,6 @@
 // jshint esversion:9
 
-const presentWorks = new mongoose.Schema({
+const EnterpriseSchema = new mongoose.Schema({
     businessName: String,
     identificationNumber: Number,
     businessType: String,
@@ -11,6 +11,7 @@ const presentWorks = new mongoose.Schema({
     province: String,
     state: String,
     country: String,
+    
 });
 
-module.exports = presentWorks;
+module.exports = mongoose.model('Enterprise', EnterpriseSchema);

@@ -2,14 +2,15 @@
 
 const mongoose = require('mongoose');
 
+
 const AssureeSchema = new mongoose.Schema({
     idNumber: {
-        type: number,
+        type: Number,
         required: [true, 'S il vous plait, veuillez ajouter votre CIN/NIF'],
         unique: true,
         maxlength: [17, 'le numero d identification ne peut pas avoir plus de 17 chiffres.' ],
         minlength: [10, 'le numero d identification ne peut pas avoir moins de 10 chiffres.'],
-        trim: true
+        trim: false
     },
     surname: {
         type: String,
@@ -33,7 +34,7 @@ const AssureeSchema = new mongoose.Schema({
     },
     birthday: {
         type: Date,
-        required: true
+        required: false
     },
     birthPlace: {
         city: String,
@@ -70,7 +71,7 @@ const AssureeSchema = new mongoose.Schema({
     //family details
     members: {
         type: mongoose.Schema.ObjectId,
-        ref: 'PresentWorks',
+        ref: 'famMemberSchema',
         required: false  
     },
     //studies 
@@ -83,10 +84,10 @@ const AssureeSchema = new mongoose.Schema({
     //Presents works
     presentWorks: {
         type: mongoose.Schema.ObjectId,
-        ref: 'PresentWorks',
+        ref: 'presentWorks',
         required: false
-    },
+    } 
     
 });
 
-module.exports = AssureeSchema;
+module.exports = mongoose.model('Assuree', AssureeSchema);
