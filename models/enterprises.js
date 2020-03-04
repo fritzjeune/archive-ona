@@ -1,4 +1,5 @@
 // jshint esversion:9
+const mongoose = require('mongoose');
 
 const EnterpriseSchema = new mongoose.Schema({
     businessName: String,

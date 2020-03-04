@@ -5,32 +5,51 @@ const Assuree = require('../models/Assurees');
 // @route       GET /archives/api/v1/assurees
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
-    const assurees = await Assuree.find();
+    try {
+        const assurees = await Assuree.find();
 
-    console.log(assurees);
-
-    res.status(200).json({
-        success: true,
-        message: "successfullly get all assurees",
-        data: assurees
-    });
-
+        console.log(assurees);
+    
+        res.status(200).json({
+            success: true,
+            message: "successfullly get all assurees",
+            count: assurees.length,
+            data: assurees
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: "Can't get any assuree or you sent a bad request"
+        });
+    }
 };
 
 // @descr       Get a single ona assure
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
 exports.getAssuree = async (req, res, next) => {
-    const assurees = await Assuree.find();
+    console.log(req.body.idNumber);
 
-    console.log(assurees);
-
-    res.status(200).json({
-        success: true,
-        message: "successfullly get all assurees",
-        data: assurees
-    });
-
+        try {
+            const assuree = await Assuree.findOne({idNumber : req.body.idNumber});
+            if (!assuree) {
+                return res.status(404).json({
+                    success: false,
+                    message: "can't find this assuree in our database",
+                });
+            }
+            console.log(assuree);
+            res.status(201).json({
+                success: true,
+                message: "successfullly get all assurees ",
+                data: assuree
+            });
+        } catch (err) {
+            res.status(404).json({
+                success: false,
+                message: "can't find this assuree in our database",
+            });
+        }
 };
 
 // @descr       Create a new ona Assuree
@@ -57,20 +76,45 @@ exports.createAssuree = async (req, res, next) => {
 // @descr       Update an ona Assuree
 // @route       PUT /archives/api/v1/assuree/:id
 // @access      Private
-exports.updateAssuree = (req, res, next) => {
+exports.updateAssuree = async (req, res, next) => {
+    console.log(req.params.id, req.body);
+    const id = req.params.id;
+    
+    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
+
+    if(!assuree) {
+        return res.status(200).json({
+            success: false,
+            message: "Cant find that Assuree"
+        });
+    }
+
     res.status(200).json({
         success: true,
-        message: "Update an ona Assuree"
+        message: "Assuree Updated successfully",
+        data: assuree
     });
 };
 
 // @descr       Delete an ona Assuree
 // @route       DELETE /archives/api/v1/assurees
 // @access      Private and Protected
-exports.deleteAssuree = (req, res, next) => {
+exports.deleteAssuree = async (req, res, next) => {
+    console.log(req.params.id, req.body);
+    const id = req.params.id;
+    
+    const assuree = await Assuree.findOneAndDelete({idNumber : id});
+
+    if(!assuree) {
+        return res.status(200).json({
+            success: false,
+            message: "Cant find that Assuree"
+        });
+    }
+
     res.status(200).json({
         success: true,
-        message: "Delete an ona Assuree"
+        message: "Assuree deleted successfully",
     });
 };
 
