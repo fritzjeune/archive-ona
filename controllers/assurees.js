@@ -77,7 +77,8 @@ exports.createAssuree = async (req, res, next) => {
 // @route       PUT /archives/api/v1/assuree/:id
 // @access      Private
 exports.updateAssuree = async (req, res, next) => {
-    console.log(req.params.id, req.body);
+    try {
+        console.log(req.params.id, req.body);
     const id = req.params.id;
     
     const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
@@ -94,13 +95,21 @@ exports.updateAssuree = async (req, res, next) => {
         message: "Assuree Updated successfully",
         data: assuree
     });
+    } catch (err) {
+        res.status(200).json({
+            success: true,
+            message: err.errmsg
+        });
+    }
+    
 };
 
 // @descr       Delete an ona Assuree
 // @route       DELETE /archives/api/v1/assurees
 // @access      Private and Protected
 exports.deleteAssuree = async (req, res, next) => {
-    console.log(req.params.id, req.body);
+    try {
+        console.log(req.params.id, req.body);
     const id = req.params.id;
     
     const assuree = await Assuree.findOneAndDelete({idNumber : id});
@@ -116,5 +125,12 @@ exports.deleteAssuree = async (req, res, next) => {
         success: true,
         message: "Assuree deleted successfully",
     });
+    } catch (err) {
+        res.status(200).json({
+            success: false,
+            message: err.errmsg,
+        });
+    }
+    
 };
 

@@ -1,7 +1,7 @@
 // jshint esversion:9
 
-const Assuree = require('../models/Assurees');
-const Enterprise = require('../models/Enterprises');
+// const Assuree = require('../models/Assurees');
+const Enterprises = require('../models/Enterprises');
 
 // @descr       Get all ONA Registered enterprises
 // @route       GET /archives/api/v1/enterprises/
@@ -14,14 +14,14 @@ exports.getEnterprises = async (req, res, next) => {
     
         res.status(200).json({
             success: true,
-            message: "successfullly get all assurees",
+            message: "successfullly get all enterprises",
             count: enterprises.length,
             data: enterprises
         });
     } catch (err) { 
         res.status(400).json({
             success: false,
-            message: "Can't get any assuree or you sent a bad request"
+            message: "Can't get any enterprise or you sent a bad request"
         });
     }
 };
@@ -30,6 +30,32 @@ exports.getEnterprises = async (req, res, next) => {
 // @descr       Get a single ONA Registered enterprises
 // @route       GET /archives/api/v1/enterprises/:enterpriseId
 // @access      Public
+exports.getEnterprise = async (req, res, next) => {
+    try {
+
+        const id = req.params.enterpriseId;
+        const enterprise = await Enterprises.findOne({idNumber : id});
+
+        if (!enterprise) {
+            return res.status(404).json({
+                success: false,
+                message: "can't find this enterprise in our database",
+            });
+        }
+        console.log(enterprise);
+    
+        res.status(200).json({
+            success: true,
+            message: "successfullly get the enterprise",
+            data: enterprise
+        });
+    } catch (err) { 
+        res.status(400).json({
+            success: false,
+            message: "Can't get any enterprise or you sent a bad request"
+        });
+    }
+};
 
 
 // @descr       create an enterprise
@@ -37,9 +63,9 @@ exports.getEnterprises = async (req, res, next) => {
 // @access      Public
 exports.createEnterprise = async (req, res, next) => {
     try {
-        const enterprise = await Enterprise.create(req.body);
+        const enterprise = await Enterprises.create(req.body);
         res.status(201).json({
-            message: "Assuree created sucessfully",
+            message: "Enterprise created sucessfully",
             success: true,
             data: enterprise
         });
@@ -57,9 +83,62 @@ exports.createEnterprise = async (req, res, next) => {
 // @descr       Update an ONA Registered enterprise
 // @route       PUT /archives/api/v1/enterprises/:enterpriseId
 // @access      Private
+exports.updateEnterprise = async (req, res, next) => {
+    try {
+        console.log(req.params.enterpriseId, req.body);
+        const id = req.params.enterpriseId;
+
+        
+        const enterprise = await Enterprises.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
+    
+        if(!enterprise) {
+            return res.status(404).json({
+                success: false,
+                message: "Cant find that Enterprise"
+            });
+        }
+    
+        res.status(200).json({
+            success: true,
+            message: "Enterprise Updated successfully",
+            data: enterprise
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(300).json({
+            success: false,
+            message: err.errmsg
+        });
+    }
+   
+};
 
 
 // @descr       Delete an ONA Registered enterprise
 // @route       DELETE /archives/api/v1/enterprises/:enterpriseId
 // @access      Private
+exports.deleteEnterprise = async (req, res, next) => {
+    try {
+        
+        const id = req.params.enterpriseId;
+        const enterprise = await Enterprise.findOneAndDelete({idNumber : id});
 
+    if(!enterprise) {
+        return res.status(200).json({
+            success: false,
+            message: "Cant find that Enterprise"
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "Enterprise deleted successfully",
+    });
+    } catch (err) {
+        res.status(200).json({
+            success: false,
+            message: err.errmsg,
+        });
+    }
+    
+};

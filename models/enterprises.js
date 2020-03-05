@@ -2,17 +2,32 @@
 const mongoose = require('mongoose');
 
 const EnterpriseSchema = new mongoose.Schema({
-    businessName: String,
-    identificationNumber: Number,
+    businessName: {
+        type: String,
+        unique: true,
+        required: [true, 'Please enter the business Name']
+    },
+    idNumber: {
+        type: Number,
+        unique: true,
+        required: [true, 'Please enter the business Id']
+    },
     businessType: String,
     businessCategory: String,
     createdAt: Date,
-    street: String,
-    city: String,
-    province: String,
-    state: String,
-    country: String,
-    
+    socialAdress: {
+        city: String,
+        province: String,
+        state: String,
+        country: String,
+        street: String,
+        },
+    employees: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Assurees',
+        required: false
+    }
+
 });
 
 module.exports = mongoose.model('Enterprise', EnterpriseSchema);
