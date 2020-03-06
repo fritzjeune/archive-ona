@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const AssureeSchema = new mongoose.Schema({
     idNumber: {
-        type: Number,
+        type: String,
         required: [true, 'S il vous plait, veuillez ajouter votre CIN/NIF'],
         unique: true,
         maxlength: [17, 'le numero d identification ne peut pas avoir plus de 17 chiffres.' ],
@@ -82,11 +82,11 @@ const AssureeSchema = new mongoose.Schema({
     },
     profession: String,
     //Presents works
-    presentWorks: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'presentWorks',
-        required: false
-    } 
+    enterprise: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Enterprise',
+            required: false
+        }
     
 });
 

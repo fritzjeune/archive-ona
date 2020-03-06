@@ -8,7 +8,7 @@ const EnterpriseSchema = new mongoose.Schema({
         required: [true, 'Please enter the business Name']
     },
     idNumber: {
-        type: Number,
+        type: String,
         unique: true,
         required: [true, 'Please enter the business Id']
     },
@@ -21,13 +21,22 @@ const EnterpriseSchema = new mongoose.Schema({
         state: String,
         country: String,
         street: String,
-        },
-    employees: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Assurees',
-        required: false
-    }
+        }
 
-});
+}, {
+    toJSON: { virtuals : true},
+    toObject: { virtuals: true}
+}
+);
+
+// reverse populate
+EnterpriseSchema.virtual('assurees', {
+    ref: 'Assuree', // The model to use
+    localField: '_id', // Find people where `localField`
+    foreignField: 'enterprise', // is equal to `foreignField`
+    // If `justOne` is true, 'members' will be a single doc as opposed to
+    // an array. `justOne` is false by default.
+    justOne: false
+  });
 
 module.exports = mongoose.model('Enterprise', EnterpriseSchema);

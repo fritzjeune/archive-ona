@@ -6,7 +6,7 @@ const Assuree = require('../models/Assurees');
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
     try {
-        const assurees = await Assuree.find();
+        const assurees = await Assuree.find().populate('enterprise');
 
         console.log(assurees);
     
@@ -28,10 +28,10 @@ exports.getAssurees = async (req, res, next) => {
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
 exports.getAssuree = async (req, res, next) => {
-    console.log(req.body.idNumber);
+    console.log(req.params.id);
 
         try {
-            const assuree = await Assuree.findOne({idNumber : req.body.idNumber});
+            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,
@@ -81,7 +81,7 @@ exports.updateAssuree = async (req, res, next) => {
         console.log(req.params.id, req.body);
     const id = req.params.id;
     
-    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
+    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise');
 
     if(!assuree) {
         return res.status(200).json({

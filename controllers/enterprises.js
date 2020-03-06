@@ -8,7 +8,7 @@ const Enterprises = require('../models/Enterprises');
 // @access      Public
 exports.getEnterprises = async (req, res, next) => {
     try {
-        const enterprises = await Enterprises.find();
+        const enterprises = await Enterprises.find().populate('assurees');
 
         console.log(enterprises);
     
@@ -87,8 +87,7 @@ exports.updateEnterprise = async (req, res, next) => {
     try {
         console.log(req.params.enterpriseId, req.body);
         const id = req.params.enterpriseId;
-
-        
+        console.log(id);
         const enterprise = await Enterprises.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
     
         if(!enterprise) {
@@ -118,26 +117,26 @@ exports.updateEnterprise = async (req, res, next) => {
 // @route       DELETE /archives/api/v1/enterprises/:enterpriseId
 // @access      Private
 exports.deleteEnterprise = async (req, res, next) => {
-    try {
-        
+    try {        
         const id = req.params.enterpriseId;
-        const enterprise = await Enterprise.findOneAndDelete({idNumber : id});
 
-    if(!enterprise) {
-        return res.status(200).json({
-            success: false,
-            message: "Cant find that Enterprise"
-        });
-    }
+        const enterprise = await Enterprises.findOneAndDelete({idNumber:id});
 
-    res.status(200).json({
-        success: true,
-        message: "Enterprise deleted successfully",
-    });
-    } catch (err) {
-        res.status(200).json({
+        if(!enterprise) {
+            return res.status(404).json({
+                success: false,
+                message: "Cant find that Enterprise"
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                message: "Enterprise deleted successfully",
+            });
+        }
+    } catch (error) {
+        res.status(401).json({
             success: false,
-            message: err.errmsg,
+            message: error
         });
     }
     
