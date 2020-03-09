@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 
 const AssureeSchema = new mongoose.Schema({
+    _id: String,
     idNumber: {
         type: String,
         required: [true, 'S il vous plait, veuillez ajouter votre CIN/NIF'],
@@ -88,6 +89,11 @@ const AssureeSchema = new mongoose.Schema({
             required: false
         }
     
+});
+
+// setting the _id 
+AssureeSchema.pre('save', (next) => {
+    this._id = this.idNumber;
 });
 
 module.exports = mongoose.model('Assuree', AssureeSchema);
