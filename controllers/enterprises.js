@@ -34,7 +34,7 @@ exports.getEnterprise = async (req, res, next) => {
     try {
 
         const id = req.params.enterpriseId;
-        const enterprise = await Enterprises.findOne({idNumber : id});
+        const enterprise = await Enterprises.findOne({idNumber : id}).populate('assurees');
 
         if (!enterprise) {
             return res.status(404).json({
@@ -47,6 +47,7 @@ exports.getEnterprise = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "successfullly get the enterprise",
+            assureesCount: enterprise.assurees.length,
             data: enterprise
         });
     } catch (err) { 

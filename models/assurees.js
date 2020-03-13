@@ -90,4 +90,4 @@ const AssureeSchema = new mongoose.Schema({
     
 });
 
-module.exports = mongoose.model('Assuree', AssureeSchema);
+module.exports = mongoose.model('Assuree', AssureeSchema) || mongoose.models.Assuree;

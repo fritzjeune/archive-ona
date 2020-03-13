@@ -1,12 +1,17 @@
 // jshint esversion:9
-const Assuree = require('../models/Assurees');
+const Work = require('../models/works');
+// const Assurees = require('../models/assurees');
+// const Enterprise = require('../models/enterprises');
+
 
 // @descr       Get all ona Assurees
 // @route       GET /archives/api/v1/assurees
 // @access      Public
 exports.getWorks = async (req, res, next) => {
     try {
-        const works = await Works.find();
+        const id = req.params.assureeId;
+
+        const works = await Work.find({ });
 
         console.log(works);
     
@@ -57,11 +62,25 @@ exports.getWorks = async (req, res, next) => {
 // @access      Private
 exports.createWork = async (req, res, next) => {
     try {
-        const assuree = await Assuree.create(req.body);
+        // getting the mongodb assuree ObjectId
+        console.log(req.body.assuree);
+        let assuree = await Assurees.findOne({idNumber: req.body.assuree});
+        console.log(assuree);
+        let id = assuree._id;
+        req.body.assuree = id;
+
+        // getting the mongodb enterprise Object id
+        console.log(req.body.enterprise);
+        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+        // console.log(enterprise);
+        let ent_id = enterprise._id;
+        req.body.enterprise = ent_id;
+
+        const work = await Work.create(req.body);
         res.status(201).json({
-            message: "Assuree created sucessfully",
+            message: "Work created sucessfully",
             success: true,
-            data: assuree
+            data: work
         });
     } catch (error) {
         // console.log(error);

@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const BarentSchema = new mongoose.Schema({
+const ParentSchema = new mongoose.Schema({
     relation: String,
     lastName: String,
     firstName: String,

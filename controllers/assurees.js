@@ -1,5 +1,6 @@
 // jshint esversion:9
 const Assuree = require('../models/Assurees');
+const Enterprise = require('../models/Enterprises');
 
 // @descr       Get all ona Assurees
 // @route       GET /archives/api/v1/assurees
@@ -57,6 +58,12 @@ exports.getAssuree = async (req, res, next) => {
 // @access      Private
 exports.createAssuree = async (req, res, next) => {
     try {
+        console.log(req.body.enterprise);
+        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+        console.log(enterprise);
+        let id = enterprise._id;
+        req.body.enterprise = id;
+
         const assuree = await Assuree.create(req.body);
         res.status(201).json({
             message: "Assuree created sucessfully",
@@ -64,8 +71,8 @@ exports.createAssuree = async (req, res, next) => {
             data: assuree
         });
     } catch (error) {
-        // console.log(error);
-        res.status(400).json({
+        console.log(error);
+        res.status(401).json({
             success: false,
             message: error.errmsg
         });

@@ -10,7 +10,7 @@
          updateAssuree, 
          deleteAssuree} = require('../controllers/assurees');
 
-         // re-routing to work router 
+// re-routing to work router 
 const workRouter = require('./works');
 
 router.use('/:assureeId/works', workRouter);
