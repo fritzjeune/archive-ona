@@ -64,6 +64,7 @@ exports.getAssuree = async (req, res, next) => {
 // @access      Private
 exports.createWork = async (req, res, next) => {
     try {
+        console.log(req.params.assureeId);
             // getting the mongodb enterprise Object id
             let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
             // console.log(enterprise);
@@ -84,7 +85,7 @@ exports.createWork = async (req, res, next) => {
         res.status(201).json({
             message: "Work created sucessfully",
             success: true,
-            data: work
+            data: work.populate('assuree enterprise')
         });
     } catch (error) {
         // console.log(error);
