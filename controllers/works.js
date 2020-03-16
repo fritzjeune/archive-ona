@@ -1,7 +1,7 @@
 // jshint esversion:9
 const Work = require('../models/works');
-// const Assurees = require('../models/assurees');
-// const Enterprise = require('../models/enterprises');
+const Assuree = require('../models/assurees');
+const Enterprise = require('../models/enterprises');
 
 
 // @descr       Get all ona Assurees
@@ -32,49 +32,53 @@ exports.getWorks = async (req, res, next) => {
 // @descr       Get a single ona assure
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
-// exports.getAssuree = async (req, res, next) => {
-//     console.log(req.params.id);
+exports.getAssuree = async (req, res, next) => {
+    console.log(req.params.id);
 
-//         try {
-//             const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
-//             if (!assuree) {
-//                 return res.status(404).json({
-//                     success: false,
-//                     message: "can't find this assuree in our database",
-//                 });
-//             }
-//             console.log(assuree);
-//             res.status(201).json({
-//                 success: true,
-//                 message: "successfullly get all assurees ",
-//                 data: assuree
-//             });
-//         } catch (err) {
-//             res.status(404).json({
-//                 success: false,
-//                 message: "can't find this assuree in our database",
-//             });
-//         }
-// };
+        try {
+
+
+            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
+            if (!assuree) {
+                return res.status(404).json({
+                    success: false,
+                    message: "can't find this assuree in our database",
+                });
+            }
+            console.log(assuree);
+            res.status(201).json({
+                success: true,
+                message: "successfullly get all assurees ",
+                data: assuree
+            });
+        } catch (err) {
+            res.status(404).json({
+                success: false,
+                message: "can't find this assuree in our database",
+            });
+        }
+};
 
 // @descr       Create a new ona Assuree
 // @route       POST /archives/api/v1/assurees
 // @access      Private
 exports.createWork = async (req, res, next) => {
     try {
-        // getting the mongodb assuree ObjectId
-        console.log(req.body.assuree);
-        let assuree = await Assurees.findOne({idNumber: req.body.assuree});
-        console.log(assuree);
-        let id = assuree._id;
-        req.body.assuree = id;
+            // getting the mongodb enterprise Object id
+            let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+            // console.log(enterprise);
+            let id = `${enterprise._id}`;
+            console.log(id);
+            req.body.enterprise = id;
 
-        // getting the mongodb enterprise Object id
-        console.log(req.body.enterprise);
-        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
-        // console.log(enterprise);
-        let ent_id = enterprise._id;
-        req.body.enterprise = ent_id;
+            // getting the mongodb enterprise Object id
+            let assuree = await Assuree.findOne({idNumber: req.body.assuree});
+            // console.log(assuree);
+            let idAss = `${assuree._id}`;
+            console.log(idAss);
+            req.body.assuree = idAss;
+
+            console.log(req.body);
 
         const work = await Work.create(req.body);
         res.status(201).json({
@@ -86,7 +90,7 @@ exports.createWork = async (req, res, next) => {
         // console.log(error);
         res.status(400).json({
             success: false,
-            message: error.errmsg
+            message: error
         });
     }
     

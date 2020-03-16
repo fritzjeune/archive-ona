@@ -39,4 +39,4 @@ EnterpriseSchema.virtual('assurees', {
     justOne: false
   });
 
-module.exports = mongoose.model('Enterprise', EnterpriseSchema);
+module.exports = mongoose.models.Enterprise || mongoose.model('Enterprise', EnterpriseSchema);

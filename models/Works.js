@@ -8,10 +8,6 @@ const workSchema = new mongoose.Schema({
         ref: 'Assuree',
         required: true
     },
-    enterpriseName: {
-        type: String,
-        required: [true, 'Please enter the business Name']
-    },
     enterprise: {
         type: mongoose.Schema.ObjectId,
         ref: 'Enterprise',

@@ -88,6 +88,19 @@ const AssureeSchema = new mongoose.Schema({
             required: false
         }
     
+}, {
+    toJSON: { virtuals : true},
+    toObject: { virtuals: true}
 });
 
-module.exports = mongoose.model('Assuree', AssureeSchema) || mongoose.models.Assuree;
+// reverse populate
+AssureeSchema.virtual('works', {
+    ref: 'Work', // The model to use
+    localField: '_id', // Find people where `localField`
+    foreignField: 'assuree', // is equal to `foreignField`
+    // If `justOne` is true, 'members' will be a single doc as opposed to
+    // an array. `justOne` is false by default.
+    justOne: false
+  });
+
+module.exports = mongoose.models.Assuree || mongoose.model('Assuree', AssureeSchema);

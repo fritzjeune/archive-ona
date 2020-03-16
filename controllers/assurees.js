@@ -7,7 +7,7 @@ const Enterprise = require('../models/Enterprises');
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
     try {
-        const assurees = await Assuree.find().populate('enterprise');
+        const assurees = await Assuree.find().populate('enterprise works');
 
         console.log(assurees);
     
@@ -58,9 +58,10 @@ exports.getAssuree = async (req, res, next) => {
 // @access      Private
 exports.createAssuree = async (req, res, next) => {
     try {
-        console.log(req.body.enterprise);
+        // getting the mongodb enterprise Object id
+        // console.log(req.body.enterprise);
         let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
-        console.log(enterprise);
+        // console.log(enterprise);
         let id = enterprise._id;
         req.body.enterprise = id;
 
@@ -71,7 +72,7 @@ exports.createAssuree = async (req, res, next) => {
             data: assuree
         });
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(401).json({
             success: false,
             message: error.errmsg
