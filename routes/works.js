@@ -11,8 +11,14 @@
          deleteWork} = require('../controllers/works');
 
  router
-    .route('/')
+    .route('/:assureeId')
     .get(getWorks)
     .post(createWork);
+
+router
+        .route('/:workId')
+        .get(getWork)
+        .delete(deleteWork)
+        .put(updateWork);
 
 module.exports = router;

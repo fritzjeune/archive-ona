@@ -10,20 +10,22 @@
          updateAssuree, 
          deleteAssuree} = require('../controllers/assurees');
 
-// re-routing to work router 
-const workRouter = require('./works');
+const {getWorks} = require('../controllers/works');
 
-router.use('/:assureeId/works', workRouter);
 
- router
-    .route('/')
-    .get(getAssurees)
-    .post(createAssuree);
+router
+   .route('/')
+   .get(getAssurees)
+   .post(createAssuree);
 
- router
-    .route('/:id')
-    .get(getAssuree)
-    .put(updateAssuree)
-    .delete(deleteAssuree);
+router
+   .route('/:id')
+   .get(getAssuree)
+   .put(updateAssuree)  
+   .delete(deleteAssuree);
 
- module.exports = router;
+router
+   .route('/:id/works')
+   .get(getWorks);
+
+module.exports = router;

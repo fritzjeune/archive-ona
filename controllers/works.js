@@ -9,9 +9,17 @@ const Enterprise = require('../models/enterprises');
 // @access      Public
 exports.getWorks = async (req, res, next) => {
     try {
-        const id = req.params.assureeId;
+        let id = req.params.assureeId;
+        let assuree = await Assuree.findOne({idNumber: id});
+        let assId = assuree._id;
 
-        const works = await Work.find({ });
+        const works = await Work.find({ assuree : assId }).populate({
+            path: 'enterprise',
+            select: 'businessName idNumber'
+        }).populate({
+            path: 'assuree',
+            select: 'idNumber surname lastname'
+        });
 
         console.log(works);
     
@@ -24,7 +32,7 @@ exports.getWorks = async (req, res, next) => {
     } catch (err) {
         res.status(400).json({
             success: false,
-            message: "Can't get any works or you sent a bad request"
+            message: "Can't get any works for that assuree  or you sent a bad request"
         });
     }
 };
@@ -32,29 +40,33 @@ exports.getWorks = async (req, res, next) => {
 // @descr       Get a single ona assure
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
-exports.getAssuree = async (req, res, next) => {
+exports.getWork = async (req, res, next) => {
     console.log(req.params.id);
 
         try {
+            const work = await Work.findById(req.params.workId).populate({
+                path: 'enterprise',
+                select: 'businessName idNumber'
+            }).populate({
+                path: 'assuree',
+                select: 'idNumber surname lastname'
+            });
 
-
-            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
-            if (!assuree) {
+            if (!work) {
                 return res.status(404).json({
                     success: false,
-                    message: "can't find this assuree in our database",
+                    message: "can't find this work in the assuree history",
                 });
             }
-            console.log(assuree);
             res.status(201).json({
                 success: true,
-                message: "successfullly get all assurees ",
-                data: assuree
+                message: "successfullly get the work",
+                data: work
             });
         } catch (err) {
             res.status(404).json({
                 success: false,
-                message: "can't find this assuree in our database",
+                message: err
             });
         }
 };
@@ -64,7 +76,7 @@ exports.getAssuree = async (req, res, next) => {
 // @access      Private
 exports.createWork = async (req, res, next) => {
     try {
-        console.log(req.params.assureeId);
+        console.log(req.params);
             // getting the mongodb enterprise Object id
             let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
             // console.log(enterprise);
@@ -73,7 +85,7 @@ exports.createWork = async (req, res, next) => {
             req.body.enterprise = id;
 
             // getting the mongodb enterprise Object id
-            let assuree = await Assuree.findOne({idNumber: req.body.assuree});
+            let assuree = await Assuree.findOne({idNumber: req.params.assureeId});
             // console.log(assuree);
             let idAss = `${assuree._id}`;
             console.log(idAss);
@@ -100,61 +112,67 @@ exports.createWork = async (req, res, next) => {
 // @descr       Update an ona Assuree
 // @route       PUT /archives/api/v1/assuree/:id
 // @access      Private
-// exports.updateAssuree = async (req, res, next) => {
-//     try {
-//         console.log(req.params.id, req.body);
-//     const id = req.params.id;
+exports.updateWork = async (req, res, next) => {
+    try {
+        console.log(req.params.workId);
     
-//     const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise');
+    let work = await Work.findById(req.params.workId);
 
-//     if(!assuree) {
-//         return res.status(200).json({
-//             success: false,
-//             message: "Cant find that Assuree"
-//         });
-//     }
+    if(!work) {
+        return res.status(404).json({
+            success: false,
+            message: "Cant find that that work history for that Assuree"
+        });
+    }
+            // getting the mongodb enterprise Object id
+            let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+            console.log(enterprise);
+            let id = `${enterprise._id}`;
+            console.log(id);
+            req.body.enterprise = id;  
 
-//     res.status(200).json({
-//         success: true,
-//         message: "Assuree Updated successfully",
-//         data: assuree
-//     });
-//     } catch (err) {
-//         res.status(200).json({
-//             success: true,
-//             message: err.errmsg
-//         });
-//     }
+    work = await Work.findByIdAndUpdate(req.params.workId, req.body);
     
-// };
-
-// // @descr       Delete an ona Assuree
-// // @route       DELETE /archives/api/v1/assurees
-// // @access      Private and Protected
-// exports.deleteAssuree = async (req, res, next) => {
-//     try {
-//         console.log(req.params.id, req.body);
-//     const id = req.params.id;
+    res.status(200).json({
+        success: true,
+        message: "work updated successfully",
+    });
+    } catch (err) {
+        res.status(200).json({
+            success: false,
+            message: err,
+        });
+    }
     
-//     const assuree = await Assuree.findOneAndDelete({idNumber : id});
+};
 
-//     if(!assuree) {
-//         return res.status(200).json({
-//             success: false,
-//             message: "Cant find that Assuree"
-//         });
-//     }
-
-//     res.status(200).json({
-//         success: true,
-//         message: "Assuree deleted successfully",
-//     });
-//     } catch (err) {
-//         res.status(200).json({
-//             success: false,
-//             message: err.errmsg,
-//         });
-//     }
+// @descr       Delete an ona Assuree
+// @route       DELETE /archives/api/v1/assurees
+// @access      Private and Protected
+exports.deleteWork = async (req, res, next) => {
+    try {
+        console.log(req.params.workId);
+     const id = req.params.workId;
     
-// };
+    const work = await Work.findByIdAndDelete(req.params.workId);
+
+    if(!work) {
+        return res.status(404).json({
+            success: false,
+            message: "Cant find that that ork history for that Assuree"
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        message: "work deleted successfully",
+    });
+    } catch (err) {
+        res.status(200).json({
+            success: false,
+            message: err.errmsg,
+        });
+    }
+    
+};
 
