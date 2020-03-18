@@ -9,9 +9,11 @@ const Enterprise = require('../models/enterprises');
 // @access      Public
 exports.getWorks = async (req, res, next) => {
     try {
-        let id = req.params.assureeId;
+        let id = req.params.nif;
         let assuree = await Assuree.findOne({idNumber: id});
         let assId = assuree._id;
+
+        console.log(assId);
 
         const works = await Work.find({ assuree : assId }).populate({
             path: 'enterprise',
@@ -41,7 +43,7 @@ exports.getWorks = async (req, res, next) => {
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
 exports.getWork = async (req, res, next) => {
-    console.log(req.params.id);
+    console.log(req.params.workId);
 
         try {
             const work = await Work.findById(req.params.workId).populate({
@@ -116,7 +118,7 @@ exports.updateWork = async (req, res, next) => {
     try {
         console.log(req.params.workId);
     
-    let work = await Work.findById(req.params.workId);
+        let work = await Work.findById(req.params.workId);
 
     if(!work) {
         return res.status(404).json({
@@ -125,17 +127,22 @@ exports.updateWork = async (req, res, next) => {
         });
     }
             // getting the mongodb enterprise Object id
-            let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+            if (req.body.enterprise) {
+                let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
             console.log(enterprise);
             let id = `${enterprise._id}`;
             console.log(id);
-            req.body.enterprise = id;  
+            req.body.enterprise = id; 
+            }
 
-    work = await Work.findByIdAndUpdate(req.params.workId, req.body);
+    work = await Work.findByIdAndUpdate(req.params.workId, req.body, {
+        new: true
+    });
     
     res.status(200).json({
         success: true,
         message: "work updated successfully",
+        data: work
     });
     } catch (err) {
         res.status(200).json({

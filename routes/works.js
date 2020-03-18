@@ -1,18 +1,16 @@
 // jshint esversion:9
 
- const express = require('express');
+const express = require('express');
+const router = express.Router();
 
- const router = express.Router();
+const { getWork,
+        getWorks, 
+        createWork, 
+        updateWork, 
+        deleteWork} = require('../controllers/works');
 
- const { getWork,
-         getWorks, 
-         createWork, 
-         updateWork, 
-         deleteWork} = require('../controllers/works');
-
- router
-    .route('/:assureeId')
-    .get(getWorks)
+router
+    .route('/')
     .post(createWork);
 
 router

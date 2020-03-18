@@ -25,7 +25,7 @@ router
    .delete(deleteAssuree);
 
 router
-   .route('/:id/works')
+   .route('/:nif/works')
    .get(getWorks);
 
 module.exports = router;
