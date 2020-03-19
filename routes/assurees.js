@@ -10,7 +10,9 @@
          updateAssuree, 
          deleteAssuree} = require('../controllers/assurees');
 
-const {getWorks} = require('../controllers/works');
+const {getWorks, createWork} = require('../controllers/works');
+
+const {addFamily} = require('../controllers/family');
 
 
 router
@@ -26,6 +28,11 @@ router
 
 router
    .route('/:nif/works')
-   .get(getWorks);
+   .get(getWorks)
+   .post(createWork);
+
+router
+   .route('/:id/family')
+   .post(addFamily);
 
 module.exports = router;

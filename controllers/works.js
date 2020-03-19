@@ -82,12 +82,19 @@ exports.createWork = async (req, res, next) => {
             // getting the mongodb enterprise Object id
             let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
             // console.log(enterprise);
+
+            if (!enterprise) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Cant find that enterprise, please add the enterprise first or verify the enterprise Id"
+                });
+            }
             let id = `${enterprise._id}`;
             console.log(id);
             req.body.enterprise = id;
 
             // getting the mongodb enterprise Object id
-            let assuree = await Assuree.findOne({idNumber: req.params.assureeId});
+            let assuree = await Assuree.findOne({idNumber: req.params.nif});
             // console.log(assuree);
             let idAss = `${assuree._id}`;
             console.log(idAss);
@@ -159,14 +166,13 @@ exports.updateWork = async (req, res, next) => {
 exports.deleteWork = async (req, res, next) => {
     try {
         console.log(req.params.workId);
-     const id = req.params.workId;
     
     const work = await Work.findByIdAndDelete(req.params.workId);
 
     if(!work) {
         return res.status(404).json({
             success: false,
-            message: "Cant find that that ork history for that Assuree"
+            message: "Cant find that that work history for that Assuree"
         });
     }
 

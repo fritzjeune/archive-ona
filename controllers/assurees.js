@@ -7,7 +7,7 @@ const Enterprise = require('../models/Enterprises');
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
     try {
-        const assurees = await Assuree.find().populate('enterprise works');
+        const assurees = await Assuree.find().populate('enterprise works family');
 
         console.log(assurees);
     
@@ -32,7 +32,7 @@ exports.getAssuree = async (req, res, next) => {
     console.log(req.params.id);
 
         try {
-            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
+            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise works family');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,
@@ -87,9 +87,22 @@ exports.createAssuree = async (req, res, next) => {
 exports.updateAssuree = async (req, res, next) => {
     try {
         console.log(req.params.id, req.body);
-    const id = req.params.id;
+        const id = req.params.id;
+
+        // getting the mongodb enterprise Object id
+        // console.log(req.body.enterprise);
+        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+        // console.log(enterprise);
+        if (!enterprise) {
+            return res.status(404).json({
+                success: false,
+                message: "Cant find that enterprise, please add the enterprise first or verify the enterprise Id"
+            });
+        }
+        let entId = enterprise._id;
+        req.body.enterprise = entId;
     
-    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise');
+    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise works');
 
     if(!assuree) {
         return res.status(200).json({
@@ -98,15 +111,15 @@ exports.updateAssuree = async (req, res, next) => {
         });
     }
 
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: "Assuree Updated successfully",
         data: assuree
     });
     } catch (err) {
         res.status(200).json({
-            success: true,
-            message: err.errmsg
+            success: false,
+            message: err.message
         });
     }
     

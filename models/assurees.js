@@ -69,11 +69,11 @@ const AssureeSchema = new mongoose.Schema({
         maxlength: [12, 'Phone number can not be longer than 12 characters']
     },
     //family details
-    members: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'famMemberSchema',
-        required: false  
-    },
+    // members: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'famMemberSchema',
+    //     required: false  
+    // },
     //studies 
     educationLevel: {
         required: false,
@@ -96,6 +96,15 @@ const AssureeSchema = new mongoose.Schema({
 // reverse populate
 AssureeSchema.virtual('works', {
     ref: 'Work', // The model to use
+    localField: '_id', // Find people where `localField`
+    foreignField: 'assuree', // is equal to `foreignField`
+    // If `justOne` is true, 'members' will be a single doc as opposed to
+    // an array. `justOne` is false by default.
+    justOne: false
+  });
+
+  AssureeSchema.virtual('family', {
+    ref: 'Family', // The model to use
     localField: '_id', // Find people where `localField`
     foreignField: 'assuree', // is equal to `foreignField`
     // If `justOne` is true, 'members' will be a single doc as opposed to
