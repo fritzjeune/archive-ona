@@ -68,12 +68,6 @@ const AssureeSchema = new mongoose.Schema({
         type: String,
         maxlength: [12, 'Phone number can not be longer than 12 characters']
     },
-    //family details
-    // members: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: 'famMemberSchema',
-    //     required: false  
-    // },
     //studies 
     educationLevel: {
         required: false,
@@ -86,7 +80,11 @@ const AssureeSchema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Enterprise',
             required: false
-        }
+        },
+    createdAt:{
+        type: Date,
+        default: Date.now
+    }
     
 }, {
     toJSON: { virtuals : true},

@@ -1,7 +1,7 @@
 // jshint esversion:9
 const Work = require('../models/works');
-const Assuree = require('../models/assurees');
-const Enterprise = require('../models/enterprises');
+const Assuree = require('../models/Assurees');
+const Enterprise = require('../models/Enterprises');
 
 
 // @descr       Get all ona Assurees

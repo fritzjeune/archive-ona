@@ -12,7 +12,7 @@
 
 const {getWorks, createWork} = require('../controllers/works');
 
-const {addFamily} = require('../controllers/family');
+const {getFamily, addFamily, updateFamily, deleteFamily} = require('../controllers/family');
 
 
 router
@@ -33,6 +33,12 @@ router
 
 router
    .route('/:id/family')
-   .post(addFamily);
+   .post(addFamily)
+   .get(getFamily);
+
+router
+   .route('/:id/family/:familyId')
+   .put(updateFamily)
+   .delete(deleteFamily);
 
 module.exports = router;

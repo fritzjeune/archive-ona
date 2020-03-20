@@ -13,7 +13,8 @@ const FamilySchema = new mongoose.Schema({
     birthday: Date,
     relation: String,
     alive: Boolean,
-    deathDate: Date   
+    deathDate: Date,
+    isADependent: Boolean,
 });
 
 
