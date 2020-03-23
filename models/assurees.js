@@ -4,12 +4,36 @@ const mongoose = require('mongoose');
 
 
 const AssureeSchema = new mongoose.Schema({
-    idNumber: {
+    nif: {
         type: String,
-        required: [true, 'S il vous plait, veuillez ajouter votre CIN/NIF'],
+        required: [false, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
-        maxlength: [17, 'le numero d identification ne peut pas avoir plus de 17 chiffres.' ],
-        minlength: [10, 'le numero d identification ne peut pas avoir moins de 10 chiffres.'],
+        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        trim: false
+    },
+    passport: {
+        type: String,
+        required: [false, 'S il vous plait, veuillez ajouter votre PASSPORT'],
+        unique: true,
+        maxlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
+        minlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
+        trim: false
+    },
+    cin: {
+        type: String,
+        required: [false, 'S il vous plait, veuillez ajouter votre CIN'],
+        unique: true,
+        maxlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
+        minlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
+        trim: false
+    },
+    niu: {
+        type: String,
+        required: [false, 'S il vous plait, veuillez ajouter votre NIU'],
+        unique: true,
+        maxlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
+        minlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
         trim: false
     },
     surname: {
@@ -75,6 +99,11 @@ const AssureeSchema = new mongoose.Schema({
         enum: ['c0', 'c1', 'c2', 't1', 'u1', 'u2','u3']
     },
     profession: String,
+    assureeType: {
+        type: String,
+        enum: ['volontaire', 'enterprise'],
+        required: true
+    },
     //Presents works
     enterprise: {
             type: mongoose.Schema.ObjectId,
@@ -82,6 +111,14 @@ const AssureeSchema = new mongoose.Schema({
             required: false
         },
     createdAt:{
+        type: Date,
+        default: Date.now
+    },
+    actualStatus: {
+        type: String,
+        enum: ['inArchive', 'Archived', 'inIdentification', 'inPrinting', 'cardPrinted', 'inAnnexe', 'cardDelivered']
+    },
+    updatedDate: {
         type: Date,
         default: Date.now
     }

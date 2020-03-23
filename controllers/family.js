@@ -7,7 +7,7 @@ const Family = require('../models/Family');
 // @access      Public
 exports.addFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({idNumber: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.id});
         // let id = assuree._id;
         console.log(assuree._id);
         req.body.assuree = `${assuree._id}`;
@@ -34,7 +34,7 @@ exports.addFamily = async (req, res, next) => {
 // @access      Public
 exports.getFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({idNumber: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.id});
         let id = assuree._id;
         console.log(id);
 
@@ -65,7 +65,7 @@ exports.getFamily = async (req, res, next) => {
 // @access      Public
 exports.updateFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({idNumber: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.id});
         let id = assuree._id;
         console.log(id);
 
@@ -92,7 +92,7 @@ exports.updateFamily = async (req, res, next) => {
 // @access      Public
 exports.deleteFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({idNumber: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.id});
         let id = assuree._id;
         console.log(id);
 

@@ -10,7 +10,7 @@ const Enterprise = require('../models/Enterprises');
 exports.getWorks = async (req, res, next) => {
     try {
         let id = req.params.nif;
-        let assuree = await Assuree.findOne({idNumber: id});
+        let assuree = await Assuree.findOne({nif: id});
         let assId = assuree._id;
 
         console.log(assId);
@@ -80,7 +80,7 @@ exports.createWork = async (req, res, next) => {
     try {
         console.log(req.params);
             // getting the mongodb enterprise Object id
-            let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+            let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
             // console.log(enterprise);
 
             if (!enterprise) {
@@ -94,7 +94,7 @@ exports.createWork = async (req, res, next) => {
             req.body.enterprise = id;
 
             // getting the mongodb enterprise Object id
-            let assuree = await Assuree.findOne({idNumber: req.params.nif});
+            let assuree = await Assuree.findOne({nif: req.params.nif});
             // console.log(assuree);
             let idAss = `${assuree._id}`;
             console.log(idAss);
@@ -135,7 +135,7 @@ exports.updateWork = async (req, res, next) => {
     }
             // getting the mongodb enterprise Object id
             if (req.body.enterprise) {
-                let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+                let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
             console.log(enterprise);
             let id = `${enterprise._id}`;
             console.log(id);

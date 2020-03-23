@@ -32,7 +32,7 @@ exports.getAssuree = async (req, res, next) => {
     console.log(req.params.id);
 
         try {
-            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise works family');
+            const assuree = await Assuree.findOne({nif : req.params.id}).populate('enterprise works family');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,
@@ -60,7 +60,7 @@ exports.createAssuree = async (req, res, next) => {
     try {
         // getting the mongodb enterprise Object id
         // console.log(req.body.enterprise);
-        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+        let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
         // console.log(enterprise);
         let id = enterprise._id;
         req.body.enterprise = id;
@@ -75,7 +75,7 @@ exports.createAssuree = async (req, res, next) => {
         // console.log(error);
         res.status(401).json({
             success: false,
-            message: error.errmsg
+            message: error.message
         });
     }
     
@@ -91,7 +91,7 @@ exports.updateAssuree = async (req, res, next) => {
 
         // getting the mongodb enterprise Object id
         // console.log(req.body.enterprise);
-        let enterprise = await Enterprise.findOne({idNumber: req.body.enterprise});
+        let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
         // console.log(enterprise);
         if (!enterprise) {
             return res.status(404).json({
@@ -102,7 +102,7 @@ exports.updateAssuree = async (req, res, next) => {
         let entId = enterprise._id;
         req.body.enterprise = entId;
     
-    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise works');
+    const assuree = await Assuree.findOneAndUpdate({nif : id}, req.body, {new: true, runValidators: true}).populate('enterprise works');
 
     if(!assuree) {
         return res.status(200).json({
@@ -133,7 +133,7 @@ exports.deleteAssuree = async (req, res, next) => {
         console.log(req.params.id, req.body);
     const id = req.params.id;
     
-    const assuree = await Assuree.findOneAndDelete({idNumber : id});
+    const assuree = await Assuree.findOneAndDelete({nif : id});
 
     if(!assuree) {
         return res.status(200).json({
