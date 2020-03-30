@@ -8,6 +8,7 @@ const workSchema = new mongoose.Schema({
         ref: 'Assuree',
         required: true
     },
+    assureeNif: String,
     enterprise: {
         type: mongoose.Schema.ObjectId,
         ref: 'Enterprise',
@@ -17,14 +18,15 @@ const workSchema = new mongoose.Schema({
     startDate: Date,
     endDate: {
         type: Date,
-        default: Date.now
+        default: null
     },
     firstOnaPayment: Date,
     lastOnaPayment:  {
         type: Date,
-        default: Date.now
+        default: null
     },
     salary: Number
 });
+
 
 module.exports = mongoose.model('Work', workSchema);

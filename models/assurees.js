@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const AssureeSchema = new mongoose.Schema({
     nif: {
         type: String,
-        required: [false, 'S il vous plait, veuillez ajouter votre NIF'],
+        required: [true, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
         maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
         minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
@@ -15,7 +15,7 @@ const AssureeSchema = new mongoose.Schema({
     passport: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre PASSPORT'],
-        unique: true,
+        unique: false,
         maxlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
         minlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
         trim: false
@@ -23,7 +23,7 @@ const AssureeSchema = new mongoose.Schema({
     cin: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre CIN'],
-        unique: true,
+        unique: false,
         maxlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
         minlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
         trim: false
@@ -31,7 +31,7 @@ const AssureeSchema = new mongoose.Schema({
     niu: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre NIU'],
-        unique: true,
+        unique: false,
         maxlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
         minlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
         trim: false

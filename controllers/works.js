@@ -68,7 +68,7 @@ exports.getWork = async (req, res, next) => {
         } catch (err) {
             res.status(404).json({
                 success: false,
-                message: err
+                message: err.message
             });
         }
 };
@@ -101,6 +101,8 @@ exports.createWork = async (req, res, next) => {
             req.body.assuree = idAss;
 
             console.log(req.body);
+
+            req.body.assureeNif = req.params.nif;
 
         const work = await Work.create(req.body);
         res.status(201).json({
