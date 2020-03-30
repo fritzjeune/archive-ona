@@ -12,6 +12,7 @@ connectDB();
 // routes files 
 const assurees = require('./routes/assurees');
 const enterprises = require('./routes/enterprises');
+const works = require('./routes/works');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(logger);
 // mount routes 
 app.use('/archives/api/v1/assurees', assurees);
 app.use('/archives/api/v1/enterprises', enterprises); 
+app.use('/archives/api/v1/works', works);
 
 
 const PORT = process.env.PORT || 3030;

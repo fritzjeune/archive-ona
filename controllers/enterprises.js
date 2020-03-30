@@ -34,7 +34,7 @@ exports.getEnterprise = async (req, res, next) => {
     try {
 
         const id = req.params.enterpriseId;
-        const enterprise = await Enterprises.findOne({idNumber : id});
+        const enterprise = await Enterprises.findOne({nif : id}).populate('assurees');
 
         if (!enterprise) {
             return res.status(404).json({
@@ -47,6 +47,7 @@ exports.getEnterprise = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "successfullly get the enterprise",
+            assureesCount: enterprise.assurees.length,
             data: enterprise
         });
     } catch (err) { 
@@ -73,7 +74,7 @@ exports.createEnterprise = async (req, res, next) => {
         // console.log(error);
         res.status(400).json({
             success: false,
-            message: error.errmsg
+            message: error.message
         });
     }
     
@@ -88,7 +89,7 @@ exports.updateEnterprise = async (req, res, next) => {
         console.log(req.params.enterpriseId, req.body);
         const id = req.params.enterpriseId;
         console.log(id);
-        const enterprise = await Enterprises.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true});
+        const enterprise = await Enterprises.findOneAndUpdate({nif : id}, req.body, {new: true, runValidators: true});
     
         if(!enterprise) {
             return res.status(404).json({
@@ -120,7 +121,7 @@ exports.deleteEnterprise = async (req, res, next) => {
     try {        
         const id = req.params.enterpriseId;
 
-        const enterprise = await Enterprises.findOneAndDelete({idNumber:id});
+        const enterprise = await Enterprises.findOneAndDelete({nif:id});
 
         if(!enterprise) {
             return res.status(404).json({

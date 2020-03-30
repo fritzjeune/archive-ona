@@ -7,10 +7,13 @@ const EnterpriseSchema = new mongoose.Schema({
         unique: true,
         required: [true, 'Please enter the business Name']
     },
-    idNumber: {
+    nif: {
         type: String,
+        required: [true, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
-        required: [true, 'Please enter the business Id']
+        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        trim: false
     },
     businessType: String,
     businessCategory: String,
@@ -39,4 +42,4 @@ EnterpriseSchema.virtual('assurees', {
     justOne: false
   });
 
-module.exports = mongoose.model('Enterprise', EnterpriseSchema);
+module.exports = mongoose.models.Enterprise || mongoose.model('Enterprise', EnterpriseSchema);

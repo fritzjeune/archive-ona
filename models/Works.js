@@ -8,19 +8,22 @@ const workSchema = new mongoose.Schema({
         ref: 'Assuree',
         required: true
     },
-    enterpriseName: {
-        type: String,
-        required: [true, 'Please enter the business Name']
-    },
-    identificationNumber: {
-        type: Number,
-        required: [true, 'Please enter the business Id']
+    enterprise: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Enterprise',
+        required: true
     },
     role: String,
     startDate: Date,
-    endDate: Date,
+    endDate: {
+        type: Date,
+        default: Date.now
+    },
     firstOnaPayment: Date,
-    lastOnaPayment: Date,
+    lastOnaPayment:  {
+        type: Date,
+        default: Date.now
+    },
     salary: Number
 });
 

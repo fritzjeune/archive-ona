@@ -10,20 +10,35 @@
          updateAssuree, 
          deleteAssuree} = require('../controllers/assurees');
 
-         // re-routing to work router 
-const workRouter = require('./works');
+const {getWorks, createWork} = require('../controllers/works');
 
-router.use('/:assureeId/works', workRouter);
+const {getFamily, addFamily, updateFamily, deleteFamily} = require('../controllers/family');
 
- router
-    .route('/')
-    .get(getAssurees)
-    .post(createAssuree);
 
- router
-    .route('/:id')
-    .get(getAssuree)
-    .put(updateAssuree)
-    .delete(deleteAssuree);
+router
+   .route('/')
+   .get(getAssurees)
+   .post(createAssuree);
 
- module.exports = router;
+router
+   .route('/:id')
+   .get(getAssuree)
+   .put(updateAssuree)  
+   .delete(deleteAssuree);
+
+router
+   .route('/:nif/works')
+   .get(getWorks)
+   .post(createWork);
+
+router
+   .route('/:id/family')
+   .post(addFamily)
+   .get(getFamily);
+
+router
+   .route('/:id/family/:familyId')
+   .put(updateFamily)
+   .delete(deleteFamily);
+
+module.exports = router;

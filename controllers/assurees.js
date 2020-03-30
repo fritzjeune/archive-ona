@@ -1,12 +1,13 @@
 // jshint esversion:9
 const Assuree = require('../models/Assurees');
+const Enterprise = require('../models/Enterprises');
 
 // @descr       Get all ona Assurees
 // @route       GET /archives/api/v1/assurees
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
     try {
-        const assurees = await Assuree.find().populate('enterprise');
+        const assurees = await Assuree.find().populate('enterprise works family');
 
         console.log(assurees);
     
@@ -31,7 +32,7 @@ exports.getAssuree = async (req, res, next) => {
     console.log(req.params.id);
 
         try {
-            const assuree = await Assuree.findOne({idNumber : req.params.id}).populate('enterprise');
+            const assuree = await Assuree.findOne({nif : req.params.id}).populate('enterprise works family');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,
@@ -57,6 +58,13 @@ exports.getAssuree = async (req, res, next) => {
 // @access      Private
 exports.createAssuree = async (req, res, next) => {
     try {
+        // getting the mongodb enterprise Object id
+        // console.log(req.body.enterprise);
+        let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
+        // console.log(enterprise);
+        let id = enterprise._id;
+        req.body.enterprise = id;
+
         const assuree = await Assuree.create(req.body);
         res.status(201).json({
             message: "Assuree created sucessfully",
@@ -65,9 +73,9 @@ exports.createAssuree = async (req, res, next) => {
         });
     } catch (error) {
         // console.log(error);
-        res.status(400).json({
+        res.status(401).json({
             success: false,
-            message: error.errmsg
+            message: error.message
         });
     }
     
@@ -79,9 +87,22 @@ exports.createAssuree = async (req, res, next) => {
 exports.updateAssuree = async (req, res, next) => {
     try {
         console.log(req.params.id, req.body);
-    const id = req.params.id;
+        const id = req.params.id;
+
+        // getting the mongodb enterprise Object id
+        // console.log(req.body.enterprise);
+        let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
+        // console.log(enterprise);
+        if (!enterprise) {
+            return res.status(404).json({
+                success: false,
+                message: "Cant find that enterprise, please add the enterprise first or verify the enterprise Id"
+            });
+        }
+        let entId = enterprise._id;
+        req.body.enterprise = entId;
     
-    const assuree = await Assuree.findOneAndUpdate({idNumber : id}, req.body, {new: true, runValidators: true}).populate('enterprise');
+    const assuree = await Assuree.findOneAndUpdate({nif : id}, req.body, {new: true, runValidators: true}).populate('enterprise works');
 
     if(!assuree) {
         return res.status(200).json({
@@ -90,15 +111,15 @@ exports.updateAssuree = async (req, res, next) => {
         });
     }
 
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: "Assuree Updated successfully",
         data: assuree
     });
     } catch (err) {
         res.status(200).json({
-            success: true,
-            message: err.errmsg
+            success: false,
+            message: err.message
         });
     }
     
@@ -112,7 +133,7 @@ exports.deleteAssuree = async (req, res, next) => {
         console.log(req.params.id, req.body);
     const id = req.params.id;
     
-    const assuree = await Assuree.findOneAndDelete({idNumber : id});
+    const assuree = await Assuree.findOneAndDelete({nif : id});
 
     if(!assuree) {
         return res.status(200).json({

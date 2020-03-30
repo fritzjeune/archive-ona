@@ -2,16 +2,22 @@
 
 const mongoose = require('mongoose');
 
-const BarentSchema = new mongoose.Schema({
-    relation: String,
+const FamilySchema = new mongoose.Schema({
+    assuree: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Assuree',
+        required: true
+    },
     lastName: String,
-    firstName: String,
+    surname: String,
     birthday: Date,
+    relation: String,
     alive: Boolean,
-    deathDate: Date   
+    deathDate: Date,
+    isADependent: Boolean,
 });
 
 
-module.exports = mongoose.model('Parent', ParentSchema);
+module.exports = mongoose.model('Family', FamilySchema);
 
 
