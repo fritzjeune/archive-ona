@@ -4,37 +4,35 @@ const mongoose = require('mongoose');
 
 
 const AssureeSchema = new mongoose.Schema({
+    photo: String,
     nif: {
         type: String,
         required: [true, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
         maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
         minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
-        trim: false
+        trim: true
     },
     passport: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre PASSPORT'],
-        unique: false,
         maxlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
         minlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
-        trim: false
+        trim: true
     },
     cin: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre CIN'],
-        unique: false,
         maxlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
         minlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
-        trim: false
+        trim: true
     },
     niu: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre NIU'],
-        unique: false,
         maxlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
         minlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
-        trim: false
+        trim: true
     },
     surname: {
         type: String,
@@ -110,22 +108,24 @@ const AssureeSchema = new mongoose.Schema({
             ref: 'Enterprise',
             required: false
         },
-    createdAt:{
-        type: Date,
-        default: Date.now
-    },
+    // createdAt:{
+    //     type: Date,
+    //     default: Date.now
+    // },
     actualStatus: {
         type: String,
         enum: ['inArchive', 'Archived', 'inIdentification', 'inPrinting', 'cardPrinted', 'inAnnexe', 'cardDelivered']
-    },
-    updatedDate: {
-        type: Date,
-        default: Date.now
     }
+    // ,
+    // updatedDate: {
+    //     type: Date,
+    //     default: Date.now
+    // }
     
 }, {
     toJSON: { virtuals : true},
-    toObject: { virtuals: true}
+    toObject: { virtuals: true},
+    timestamps: true
 });
 
 // reverse populate

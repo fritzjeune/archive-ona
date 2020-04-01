@@ -29,17 +29,17 @@ exports.getAssurees = async (req, res, next) => {
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
 exports.getAssuree = async (req, res, next) => {
-    console.log(req.params.id);
+    // console.log(req.query);
 
         try {
-            const assuree = await Assuree.findOne({nif : req.params.id}).populate('enterprise works family');
+            const assuree = await Assuree.find(req.query).populate('enterprise works family');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,
                     message: "can't find this assuree in our database",
                 });
             }
-            console.log(assuree);
+            // console.log(assuree);
             res.status(201).json({
                 success: true,
                 message: "successfullly get all assurees ",
@@ -86,8 +86,8 @@ exports.createAssuree = async (req, res, next) => {
 // @access      Private
 exports.updateAssuree = async (req, res, next) => {
     try {
-        console.log(req.params.id, req.body);
-        const id = req.params.id;
+        console.log(req.params.nif, req.body);
+        const id = req.params.nif;
 
         // getting the mongodb enterprise Object id
         // console.log(req.body.enterprise);
@@ -130,10 +130,10 @@ exports.updateAssuree = async (req, res, next) => {
 // @access      Private and Protected
 exports.deleteAssuree = async (req, res, next) => {
     try {
-        console.log(req.params.id, req.body);
-    const id = req.params.id;
+        console.log(req.params.nif, req.body);
+    // const id = req.params.nif;
     
-    const assuree = await Assuree.findOneAndDelete({nif : id});
+    const assuree = await Assuree.findOne({nif : req.params.nif});
 
     if(!assuree) {
         return res.status(200).json({
@@ -141,6 +141,7 @@ exports.deleteAssuree = async (req, res, next) => {
             message: "Cant find that Assuree"
         });
     }
+    await assuree.remove();
 
     res.status(200).json({
         success: true,

@@ -10,9 +10,9 @@
          updateAssuree, 
          deleteAssuree} = require('../controllers/assurees');
 
-const {getWorks, createWork} = require('../controllers/works');
+const {getWorks, createWork, getActualWorks} = require('../controllers/works');
 
-const {getFamily, addFamily, updateFamily, deleteFamily} = require('../controllers/family');
+const {getFamily, getFamilies, addFamily, updateFamily, deleteFamily} = require('../controllers/family');
 
 
 router
@@ -21,7 +21,7 @@ router
    .post(createAssuree);
 
 router
-   .route('/:id')
+   .route('/:nif')
    .get(getAssuree)
    .put(updateAssuree)  
    .delete(deleteAssuree);
@@ -32,12 +32,20 @@ router
    .post(createWork);
 
 router
-   .route('/:id/family')
+   .route('/:nif/works/actual')
+   .get(getActualWorks);
+
+router
+   .route('/:nif/family')
    .post(addFamily)
    .get(getFamily);
 
+// router
+//    .route('/families')
+//    .get(getFamilies);
+
 router
-   .route('/:id/family/:familyId')
+   .route('/:nif/family/:familyId')
    .put(updateFamily)
    .delete(deleteFamily);
 

@@ -8,13 +8,20 @@ const FamilySchema = new mongoose.Schema({
         ref: 'Assuree',
         required: true
     },
+    assureeNif: String,
     lastName: String,
     surname: String,
+    sexe: {
+        type: String,
+        enum: ['masculin', 'feminin']
+    },
     birthday: Date,
     relation: String,
     alive: Boolean,
     deathDate: Date,
     isADependent: Boolean,
+}, {
+    timestamps: true
 });
 
 

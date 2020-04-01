@@ -14,6 +14,7 @@ const workSchema = new mongoose.Schema({
         ref: 'Enterprise',
         required: true
     },
+    enterpriseNif: String,
     role: String,
     startDate: Date,
     endDate: {

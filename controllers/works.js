@@ -39,6 +39,39 @@ exports.getWorks = async (req, res, next) => {
     }
 };
 
+exports.getActualWorks = async (req, res, next) => {
+    try {
+        let id = req.params.nif;
+        let assuree = await Assuree.findOne({nif: id});
+        let assId = assuree._id;
+
+        console.log(assId);
+
+        const works = await Work.find({ assuree : assId, endDate: null}).populate({
+            path: 'enterprise',
+            select: 'businessName idNumber'
+        }).populate({
+            path: 'assuree',
+            select: 'idNumber surname lastname'
+        });
+
+        console.log(works);
+    
+        res.status(200).json({
+            success: true,
+            message: "successfullly get all works",
+            count: works.length,
+            data: works
+        });
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: "Can't get any works for that assuree  or you sent a bad request"
+        });
+    }
+};
+
+
 // @descr       Get a single ona assure
 // @route       GET /archives/api/v1/assurees/:id
 // @access      Public
@@ -79,6 +112,8 @@ exports.getWork = async (req, res, next) => {
 exports.createWork = async (req, res, next) => {
     try {
         console.log(req.params);
+
+            const enterId = req.body.enterprise;
             // getting the mongodb enterprise Object id
             let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
             // console.log(enterprise);
@@ -103,6 +138,7 @@ exports.createWork = async (req, res, next) => {
             console.log(req.body);
 
             req.body.assureeNif = req.params.nif;
+            req.body.enterpriseNif = enterId;
 
         const work = await Work.create(req.body);
         res.status(201).json({

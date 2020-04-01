@@ -7,10 +7,11 @@ const Family = require('../models/Family');
 // @access      Public
 exports.addFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({nif: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.nif});
         // let id = assuree._id;
         console.log(assuree._id);
         req.body.assuree = `${assuree._id}`;
+        req.body.assureeNif = req.params.nif;
 
         const family = await Family.create(req.body);
 
@@ -29,29 +30,53 @@ exports.addFamily = async (req, res, next) => {
     }
 };
 
-// @descr       create a family member for an assuree
+// @descr       get family member for an assuree
 // @route       GET /archives/api/v1/assurees/:id/family
 // @access      Public
 exports.getFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({nif: req.params.id});
-        let id = assuree._id;
-        console.log(id);
+        let family;
+        const assuree = await Assuree.findOne({nif: req.params.nif});
+        if (!assuree) {
+            family = await Family.find({assureeNif : req.params.nif});
+            if(!family) {
+                return res.status(404).json({
+                    success: false,
+                    message: `cant find any family of the assuree ${req.params.nif}`
+                });
+            } else {
 
+                const familyDp = await Family.find({assureeNif : req.params.nif, isADependent : true});
+                console.log(familyDp);
 
-        const family = await Family.find({assuree : id});
-
-        const familyDp = await Family.find({assuree : id, isADependent: true});
-
-        console.log(family);
+                res.status(200).json({
+                    success: true,
+                    message: `successfullly get the family 0 members for the Assuree ${req.params.nif}`,
+                    familyCount: family.length, 
+                    dependentCount: familyDp.length,
+                    data: family 
+                });
+            }
+        } else {
+            let id = assuree._id;
+            console.log(id);
     
-        res.status(200).json({
-            success: true,
-            message: `successfullly get the family members for the Assuree ${req.params.id}`,
-            familyCount: family.length, 
-            dependentCount: familyDp.length,
-            data: family
-        });
+    
+            family = await Family.find({assuree : id});
+    
+            const familyDp = await Family.find({assuree : id, isADependent: true});
+    
+            console.log(family);
+        
+            res.status(200).json({
+                success: true,
+                message: `successfullly get the family 1 members for the Assuree ${req.params.nif}`,
+                familyCount: family.length, 
+                dependentCount: familyDp.length,
+                data: family
+            });
+        }
+
     } catch (err) {
         res.status(400).json({
             success: false,
@@ -60,19 +85,21 @@ exports.getFamily = async (req, res, next) => {
     }
 };
 
+
 // @descr       create a family member for an assuree
-// @route       PUT /archives/api/v1/assurees/:id/family/:familyId
+// @route       PUT /archives/api/v1/assurees/:nif/family/:familyId
 // @access      Public
 exports.updateFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({nif: req.params.id});
+        console.log(req.params);
+        const assuree = await Assuree.findOne({nif: req.params.nif});
         let id = assuree._id;
         console.log(id);
 
 
         const family = await Family.findOneAndUpdate({assuree : id, _id: req.params.familyId}, req.body, {new : true, runValidators: true});
 
-        console.log(family);
+        // console.log(family);
     
         res.status(200).json({
             success: true,
@@ -82,7 +109,7 @@ exports.updateFamily = async (req, res, next) => {
     } catch (err) {
         res.status(400).json({
             success: false,
-            message: "Can't add the family member or you sent a bad request"
+            message: err
         });
     }
 };
@@ -92,14 +119,14 @@ exports.updateFamily = async (req, res, next) => {
 // @access      Public
 exports.deleteFamily = async (req, res, next) => {
     try {
-        const assuree = await Assuree.findOne({nif: req.params.id});
+        const assuree = await Assuree.findOne({nif: req.params.nif});
         let id = assuree._id;
         console.log(id);
 
 
         const family = await Family.findOneAndDelete({assuree : id, _id: req.params.familyId});
 
-        console.log(family);    
+        // console.log(family);    
         if (!family) {
             return res.status(404).json({
                 success: false,
