@@ -123,17 +123,26 @@ exports.createWork = async (req, res, next) => {
                     success: false,
                     message: "Cant find that enterprise, please add the enterprise first or verify the enterprise Id"
                 });
+            } else {
+                let id = `${enterprise._id}`;
+                console.log(id);
+                req.body.enterprise = id;
             }
-            let id = `${enterprise._id}`;
-            console.log(id);
-            req.body.enterprise = id;
 
             // getting the mongodb enterprise Object id
             let assuree = await Assuree.findOne({nif: req.params.nif});
             // console.log(assuree);
-            let idAss = `${assuree._id}`;
-            console.log(idAss);
-            req.body.assuree = idAss;
+            if (!assuree) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Cant find that assuree, please add the assuree first or verify the assuree Nif"
+                });
+            } else {
+                let idAss = `${assuree._id}`;
+                console.log(idAss);
+                req.body.assuree = idAss;
+            }
+            
 
             console.log(req.body);
 
@@ -146,12 +155,13 @@ exports.createWork = async (req, res, next) => {
             success: true,
             data: work.populate('assuree enterprise')
         });
-    } catch (error) {
-        // console.log(error);
-        res.status(400).json({
-            success: false,
-            message: error
-        });
+    } catch (err) {
+        // // console.log(error);
+        // res.status(400).json({
+        //     success: false,
+        //     message: error
+        // });
+        next(err);
     }
     
 };
@@ -161,23 +171,29 @@ exports.createWork = async (req, res, next) => {
 // @access      Private
 exports.updateWork = async (req, res, next) => {
     try {
-        console.log(req.params.workId);
+        // console.log(req.params.workId);
     
         let work = await Work.findById(req.params.workId);
 
-    if(!work) {
-        return res.status(404).json({
-            success: false,
-            message: "Cant find that that work history for that Assuree"
-        });
-    }
+        if(!work) {
+            return res.status(404).json({
+                success: false,
+                message: "Cant find that that work history for that Assuree"
+            });
+        }
             // getting the mongodb enterprise Object id
             if (req.body.enterprise) {
                 let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
-            console.log(enterprise);
-            let id = `${enterprise._id}`;
-            console.log(id);
-            req.body.enterprise = id; 
+                if (!enterprise) {
+                    return res.status(404).json({
+                        success: false,
+                        message: "Cant find that enterprise, please add the enterprise first or verify the enterprise Id"
+                    });
+                } else {
+                    let id = `${enterprise._id}`;
+                    console.log(id);
+                    req.body.enterprise = id;
+                } 
             }
 
     work = await Work.findByIdAndUpdate(req.params.workId, req.body, {
