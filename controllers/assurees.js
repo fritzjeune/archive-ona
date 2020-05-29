@@ -7,9 +7,10 @@ const Enterprise = require('../models/Enterprises');
 // @access      Public
 exports.getAssurees = async (req, res, next) => {
     try {
-        const assurees = await Assuree.find().populate('enterprise works family');
+        // console.log(req.query);
+        const assurees = await Assuree.find(req.query).populate('enterprise works family');
 
-        console.log(assurees);
+        // console.log(assurees);
     
         res.status(200).json({
             success: true,
@@ -32,7 +33,7 @@ exports.getAssuree = async (req, res, next) => {
     // console.log(req.query);
 
         try {
-            const assuree = await Assuree.find(req.query).populate('enterprise works family');
+            const assuree = await Assuree.find(req.params).populate('enterprise works family');
             if (!assuree) {
                 return res.status(404).json({
                     success: false,

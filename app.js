@@ -13,6 +13,7 @@ connectDB();
 const assurees = require('./routes/assurees');
 const enterprises = require('./routes/enterprises');
 const works = require('./routes/works');
+const requestforms = require('./routes/requestforms');
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(logger);
 app.use('/archives/api/v1/assurees', assurees);
 app.use('/archives/api/v1/enterprises', enterprises); 
 app.use('/archives/api/v1/works', works);
+app.use('/archives/api/v1/requestforms', requestforms);
 
 
 

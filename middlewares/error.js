@@ -1,14 +1,17 @@
 // jshint esversion:9
 
-const errorHandler = (err, req, res, next) => {
-    // log the error in the console 
-    console.log(err);
+exports.errorHandler = (err, statusCode, res, next) => {
+  // log the error in the console console.log(err);
 
-    res.status(500).json({
-        sucess: false,
-        message: err.message
-    });
+  res
+    .status(statusCode)
+    .json({sucess: false, message: err.message});
 };
 
-
-module.exports = errorHandler;
+exports.errorMessage = (statusCode, serverMessage, successBoolean, data) => {
+    res.status(statusCode).json({
+        success: successBoolean,
+        message: serverMessage,
+        data: data
+    });
+};
