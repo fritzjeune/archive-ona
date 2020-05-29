@@ -3,11 +3,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { addRequest } = require('../controllers/requestforms');
+const { addRequest, getRequest, updateRequest } = require('../controllers/requestforms');
 
 router
     .route('/')
-    .post(addRequest);
+    .post(addRequest)
+    .get(getRequest);
+
+router
+    .route('/:id')
+    .put(updateRequest);
 
 // router
 //         .route('/:workId')
