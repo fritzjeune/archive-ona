@@ -104,6 +104,39 @@ exports.updateRequest = async (req, res, next) => {
             }); 
         }
 
+
+        // verifying enterprise information before updating data
+        if (req.body.enterprise) {
+            const enterprise = await Enterprise.findOne({nif: req.body.enterprise});
+            if (!enterprise) {
+                return  res.status(404).json({
+                    success: false,
+                    message: "enterprise not found, please check enterprise NIF"
+                });
+            }
+            const id = enterprise._id;
+            req.body.enterprise = id;
+        }
+
+         // finding the assuree info before updating data
+        if (req.body.assureeNif) {
+            const assuree = await Assuree.findOne({nif: req.body.assureeNif});
+
+            if (!assuree) {
+                return  res.status(404).json({
+                    success: false,
+                    message: "assuree not found, please check the NIF"
+                });
+            }
+            let id = assuree._id;
+            console.log(id);
+            req.body.assuree = id;
+            // adding missed fields from the database   
+            req.body.lastname = assuree.lastname;
+            req.body.surname = assuree.surname;
+        }
+        
+
         const request = await RequestForm.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true})
         .populate('assuree', 'nif surname lastname email')
         .populate('enterprise', 'businessName nif businessCategory');

@@ -14,6 +14,7 @@ const assurees = require('./routes/assurees');
 const enterprises = require('./routes/enterprises');
 const works = require('./routes/works');
 const requestforms = require('./routes/requestforms');
+const auth = require('./routes/auth');
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.use('/archives/api/v1/assurees', assurees);
 app.use('/archives/api/v1/enterprises', enterprises); 
 app.use('/archives/api/v1/works', works);
 app.use('/archives/api/v1/requestforms', requestforms);
+app.use('/archives/api/v1/auth', auth);
+
 
 
 

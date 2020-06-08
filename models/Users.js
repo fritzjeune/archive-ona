@@ -1,10 +1,12 @@
 // jshint esversion:9
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
+        required: true, 
         trim: true,
         unique: true,
         lowercase: true,
@@ -18,6 +20,7 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
+        required: true, 
         minlength: [8, 'password must have 8 caracters or more'],
         trim: true,
     },
@@ -25,6 +28,27 @@ const UserSchema = new mongoose.Schema({
     lastname: String
 }, {
     timestamps: true
+});
+
+UserSchema.pre('save', function(next) {
+    let user = this;
+    
+    if (user.isModified('password')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            console.log(salt);
+            if (err) return next(err);
+    
+            bcrypt.hash(user.password, salt , (err, hash) => {
+                if(err) return next(err);
+                console.log(hash);
+                user.password = hash;
+                next();
+            });
+        }); 
+    } else {
+        next();
+    }
+    
 });
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema);
