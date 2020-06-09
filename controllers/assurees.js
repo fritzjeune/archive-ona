@@ -63,6 +63,13 @@ exports.createAssuree = async (req, res, next) => {
         // console.log(req.body.enterprise);
         let enterprise = await Enterprise.findOne({nif: req.body.enterprise});
         // console.log(enterprise);
+        if (!enterprise) {
+            return res.status(401).json({
+                success: false,
+                message: 'Enterprise not exist , please verify NIF enterprise'
+            });
+            
+        }
         let id = enterprise._id;
         req.body.enterprise = id;
 

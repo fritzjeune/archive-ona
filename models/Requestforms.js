@@ -33,7 +33,7 @@ const RequestSchema = new mongoose.Schema({
         required: false
     }, 
 }, {
-    timestamps: { currentTime: () => Math.floor(Date.now() / 1000) }
+    timestamps: true
 });
 
 
