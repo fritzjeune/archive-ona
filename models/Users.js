@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -12,7 +13,7 @@ const UserSchema = new mongoose.Schema({
         lowercase: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
-    user: {
+    username: {
         type: String,
         unique: true,
         maxlength: [15, 'user cannot have more than 15 caracters'],
@@ -25,7 +26,8 @@ const UserSchema = new mongoose.Schema({
         trim: true,
     },
     surname: String,
-    lastname: String
+    lastname: String,
+    token : String
 }, {
     timestamps: true
 });
@@ -50,5 +52,17 @@ UserSchema.pre('save', function(next) {
     }
     
 });
+
+UserSchema.methods.generateToken = function(cb) {
+    var user = this;
+    var token = jwt.sign(user._id.toHexString(), 'supersecret');
+
+    user.token = token;
+    user.save(function (err, user) {
+        if (err) return cb(err);
+        cb(null, user);
+    });
+
+};
 
 module.exports = mongoose.models.User || mongoose.model('User', UserSchema);

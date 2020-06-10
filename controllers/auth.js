@@ -54,10 +54,19 @@ exports.userLogin = async (req, res, next) => {
                         message: "password incorrect"
                     });
                 } else {
-                    res.status(200).json({
-                        success: true,
-                        message: `welcome Mr(s) ${user.lastname}`
+                    user.generateToken((err, user) => {
+                        if (err) {
+                            return res.status(400).json({
+                                success: false,
+                                message: "login failed"
+                            });
+                        }
+                        return res.cookie('auth', user.token).send('ok');
                     });
+                    // res.status(200).json({
+                    //     success: true,
+                    //     message: `welcome Mr(s) ${user.lastname}`
+                    // });
                 }
             });
         }
