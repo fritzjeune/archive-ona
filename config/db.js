@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '.config/config.env'});
 
 const atlasUri = 'mongodb+srv://dbFritz:ma$19rie@cluster0-begoj.mongodb.net/assurees?retryWrites=true&w=majority';
-const localUri = 'mongodb://127.0.0.1:27017';
+const localUri = 'mongodb://127.0.0.1:27017/ona-archive';
 
 const connectDB = async () => {
     const conn = await mongoose.connect(localUri, {

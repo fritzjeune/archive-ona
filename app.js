@@ -15,6 +15,7 @@ const enterprises = require('./routes/enterprises');
 const works = require('./routes/works');
 const requestforms = require('./routes/requestforms');
 const auth = require('./routes/auth');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -27,6 +28,7 @@ const logger = (req, res, next) => {
 };
 
 app.use(logger);
+app.use(cookieParser());
 
 // mount routes 
 app.use('/archives/api/v1/assurees', assurees);
