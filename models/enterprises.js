@@ -11,8 +11,8 @@ const EnterpriseSchema = new mongoose.Schema({
         type: String,
         required: [true, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
-        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
-        minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.'],
+        minlength: [10, 'le numero d identification doit avoir 10 chiffres.'],
         trim: false
     },
     businessType: String,
@@ -24,13 +24,12 @@ const EnterpriseSchema = new mongoose.Schema({
         state: String,
         country: String,
         street: String,
-        }
+    }
 
 }, {
-    toJSON: { virtuals : true},
-    toObject: { virtuals: true}
-}
-);
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
 
 // reverse populate
 EnterpriseSchema.virtual('assurees', {
@@ -40,6 +39,6 @@ EnterpriseSchema.virtual('assurees', {
     // If `justOne` is true, 'members' will be a single doc as opposed to
     // an array. `justOne` is false by default.
     justOne: false
-  });
+});
 
 module.exports = mongoose.models.Enterprise || mongoose.model('Enterprise', EnterpriseSchema);

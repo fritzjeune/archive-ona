@@ -1,6 +1,8 @@
 // jshint esversion:9
 
 const mongoose = require('mongoose');
+const Assuree = require('./assurees');
+const Enterprise = require('./enterprises');
 
 const workSchema = new mongoose.Schema({
     assuree: {
@@ -22,11 +24,27 @@ const workSchema = new mongoose.Schema({
         default: null
     },
     firstOnaPayment: Date,
-    lastOnaPayment:  {
+    lastOnaPayment: {
         type: Date,
         default: null
     },
     salary: Number
+});
+
+workSchema.post('save', async function(doc, next) {
+
+    // const enterprise = doc.enterprise;
+
+    const assuree = await Assuree.findById(doc.assuree);
+    const enterprise = await Enterprise.findById(doc.enterprise);
+    console.log(enterprise._id);
+    assuree.enterprise.push(enterprise);
+    await assuree.save();
+
+    next();
+
+
+
 });
 
 

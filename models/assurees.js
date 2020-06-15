@@ -9,29 +9,29 @@ const AssureeSchema = new mongoose.Schema({
         type: String,
         required: [true, 'S il vous plait, veuillez ajouter votre NIF'],
         unique: true,
-        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
-        minlength: [10, 'le numero d identification doit avoir 10 chiffres.' ],
+        maxlength: [10, 'le numero d identification doit avoir 10 chiffres.'],
+        minlength: [10, 'le numero d identification doit avoir 10 chiffres.'],
         trim: true
     },
     passport: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre PASSPORT'],
-        maxlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
-        minlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.' ],
+        maxlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.'],
+        minlength: [9, 'le numero de PASSPORT doit avoir 10 chiffres.'],
         trim: true
     },
     cin: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre CIN'],
-        maxlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
-        minlength: [17, 'le numero de CIN doit avoir 10 chiffres.' ],
+        maxlength: [17, 'le numero de CIN doit avoir 10 chiffres.'],
+        minlength: [17, 'le numero de CIN doit avoir 10 chiffres.'],
         trim: true
     },
     niu: {
         type: String,
         required: [false, 'S il vous plait, veuillez ajouter votre NIU'],
-        maxlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
-        minlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.' ],
+        maxlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.'],
+        minlength: [10, 'le numero d identification unique(NIU) doit avoir 10 chiffres.'],
         trim: true
     },
     surname: {
@@ -41,7 +41,7 @@ const AssureeSchema = new mongoose.Schema({
         trim: true
     },
     lastname: {
-        type: String, 
+        type: String,
         required: [true, 'S il vous plait, veuillez ajouter le prenom'],
         unique: false,
         trim: true
@@ -52,7 +52,7 @@ const AssureeSchema = new mongoose.Schema({
         enum: [
             'Masculin',
             'Feminin'
-          ]
+        ]
     },
     birthday: {
         type: Date,
@@ -94,7 +94,7 @@ const AssureeSchema = new mongoose.Schema({
     educationLevel: {
         required: false,
         type: String,
-        enum: ['c0', 'c1', 'c2', 't1', 'u1', 'u2','u3']
+        enum: ['c0', 'c1', 'c2', 't1', 'u1', 'u2', 'u3']
     },
     profession: String,
     assureeType: {
@@ -103,11 +103,11 @@ const AssureeSchema = new mongoose.Schema({
         required: true
     },
     //Presents works
-    enterprise: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Enterprise',
-            required: false
-        },
+    enterprise: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Enterprise',
+        required: false
+    }],
     // createdAt:{
     //     type: Date,
     //     default: Date.now
@@ -121,10 +121,10 @@ const AssureeSchema = new mongoose.Schema({
     //     type: Date,
     //     default: Date.now
     // }
-    
+
 }, {
-    toJSON: { virtuals : true},
-    toObject: { virtuals: true},
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     timestamps: true
 });
 
@@ -136,15 +136,15 @@ AssureeSchema.virtual('works', {
     // If `justOne` is true, 'members' will be a single doc as opposed to
     // an array. `justOne` is false by default.
     justOne: false
-  });
+});
 
-  AssureeSchema.virtual('family', {
+AssureeSchema.virtual('family', {
     ref: 'Family', // The model to use
     localField: '_id', // Find people where `localField`
     foreignField: 'assuree', // is equal to `foreignField`
     // If `justOne` is true, 'members' will be a single doc as opposed to
     // an array. `justOne` is false by default.
     justOne: false
-  });
+});
 
 module.exports = mongoose.models.Assuree || mongoose.model('Assuree', AssureeSchema);

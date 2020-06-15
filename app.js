@@ -1,11 +1,11 @@
 // jshint esversion: 9
 
-const express = require("express");
+const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 
 //load env files 
-dotenv.config({ path: '.config/config.env'});
+dotenv.config({ path: '.config/config.env' });
 
 connectDB();
 
@@ -20,7 +20,7 @@ const app = express();
 
 app.use(express.json());
 
-const logger = (req , res, next) => {
+const logger = (req, res, next) => {
     console.log(`${req.method} ${req.protocol}://${req.get('host')}${req.originalUrl}`);
 
     next();
@@ -30,7 +30,7 @@ app.use(logger);
 
 // mount routes 
 app.use('/archives/api/v1/assurees', assurees);
-app.use('/archives/api/v1/enterprises', enterprises); 
+app.use('/archives/api/v1/enterprises', enterprises);
 app.use('/archives/api/v1/works', works);
 app.use('/archives/api/v1/requestforms', requestforms);
 app.use('/archives/api/v1/auth', auth);
@@ -50,4 +50,3 @@ process.on('unhandledRejection', (err, promise) => {
     //close the server and exit process
     server.close(() => process.exit(1));
 });
-

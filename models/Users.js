@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true, 
+        required: true,
         trim: true,
         unique: true,
         lowercase: true,
@@ -21,47 +21,52 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true, 
+        required: true,
         minlength: [8, 'password must have 8 caracters or more'],
         trim: true,
     },
     surname: String,
     lastname: String,
-    token : String
+    tokens: [{
+        token: {
+            type: String,
+            required: false
+        }
+    }]
 }, {
     timestamps: true
 });
 
 UserSchema.pre('save', function(next) {
     let user = this;
-    
+
     if (user.isModified('password')) {
         bcrypt.genSalt(10, (err, salt) => {
             console.log(salt);
             if (err) return next(err);
-    
-            bcrypt.hash(user.password, salt , (err, hash) => {
-                if(err) return next(err);
+
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                if (err) return next(err);
                 console.log(hash);
                 user.password = hash;
                 next();
             });
-        }); 
+        });
     } else {
         next();
     }
-    
+
 });
 
-UserSchema.methods.generateToken = function(cb) {
+UserSchema.methods.generateToken = function() {
     var user = this;
     var token = jwt.sign(user._id.toHexString(), 'supersecret');
 
-    user.token = token;
-    user.save(function (err, user) {
-        if (err) return cb(err);
-        cb(null, user);
+    user.tokens = user.tokens.concat({ token });
+    user.save(function(err) {
+        if (err) throw err;
     });
+    return token;
 
 };
 

@@ -6,21 +6,22 @@ const bcrypt = require('bcrypt');
 // @descr       create a family member for an assuree
 // @route       POST /archives/api/v1/assurees/:id/family
 // @access      Public
-exports.createUser = async (req, res, next) => {
+exports.createUser = async(req, res, next) => {
     try {
         const user = await User.create(req.body);
+        const token = await user.generateToken();
+        // console.log(user);
 
-        console.log(user);
-    
-        res.status(200).json({
+        res.status(201).json({
             success: true,
-            message: "successfullly added the family member",
-            data: user
+            message: "successfullly created your account",
+            data: { user, token }
         });
     } catch (err) {
+        console.log(err);
         res.status(400).json({
             success: false,
-            message: "user not created"
+            message: err.message
         });
     }
 };
@@ -28,10 +29,10 @@ exports.createUser = async (req, res, next) => {
 // @descr       create a family member for an assuree
 // @route       POST /archives/api/v1/assurees/:id/family
 // @access      Public
-exports.userLogin = async (req, res, next) => {
+exports.userLogin = async(req, res, next) => {
     try {
-        const user = await User.findOne({email:req.body.email});
-        console.log(user);
+        const user = await User.findOne({ email: req.body.email });
+        // console.log(user);
 
         if (!user) {
             return res.status(404).json({
@@ -54,19 +55,15 @@ exports.userLogin = async (req, res, next) => {
                         message: "password incorrect"
                     });
                 } else {
-                    user.generateToken((err, user) => {
-                        if (err) {
-                            return res.status(400).json({
-                                success: false,
-                                message: "login failed"
-                            });
-                        }
-                        return res.cookie('auth', user.token).send('ok');
-                    });
-                    // res.status(200).json({
-                    //     success: true,
-                    //     message: `welcome Mr(s) ${user.lastname}`
-                    // });
+                    try {
+                        const token = user.generateToken();
+                        return res.cookie('auth', token).send({ user, token });
+                    } catch (e) {
+                        return res.status(400).json({
+                            success: false,
+                            message: "login failed"
+                        });
+                    }
                 }
             });
         }

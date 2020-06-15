@@ -21,3 +21,6 @@ method : put
 path : ona/archives/api/v1/assurees/:id
 descr: delete all data for an assuree
 method : delete
+
+todo
+add a error function to trigger mongoose email validation failed on creating a user 
