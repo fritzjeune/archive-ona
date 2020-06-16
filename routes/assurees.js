@@ -11,7 +11,8 @@ const {
     getAssurees,
     createAssuree,
     updateAssuree,
-    deleteAssuree
+    deleteAssuree,
+    uploadPhoto
 } = require('../controllers/assurees');
 
 const { getWorks, createWork, getActualWorks } = require('../controllers/works');
@@ -44,9 +45,9 @@ router
     .post(addFamily)
     .get(getFamily);
 
-// router
-//    .route('/families')
-//    .get(getFamilies);
+router
+   .route('/:nif/picture')
+   .put(uploadPhoto);
 
 router
     .route('/:nif/family/:familyId')

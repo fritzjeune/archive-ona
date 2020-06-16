@@ -140,6 +140,11 @@ exports.deleteAssuree = async(req, res, next) => {
 exports.uploadPhoto = async(req, res, next) => {
     try {
         console.log('this is my picture');
+        res.status(200).json({
+            success: true,
+            message: "picture added",
+        });
+
     } catch (err) {
         res.status(400).json({
             success: false,
