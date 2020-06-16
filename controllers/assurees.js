@@ -19,7 +19,7 @@ exports.getAssurees = async(req, res, next) => {
             data: assurees
         });
     } catch (err) {
-        res.status(400).json({
+        res.status(404).json({
             success: false,
             message: "Can't get any assuree or you sent a bad request"
         });
@@ -67,7 +67,7 @@ exports.createAssuree = async(req, res, next) => {
         });
     } catch (error) {
         // console.log(error);
-        res.status(401).json({
+        res.status(400).json({
             success: false,
             message: error.message
         });
@@ -98,7 +98,7 @@ exports.updateAssuree = async(req, res, next) => {
             data: assuree
         });
     } catch (err) {
-        res.status(200).json({
+        res.status(400).json({
             success: false,
             message: err.message
         });
@@ -129,7 +129,19 @@ exports.deleteAssuree = async(req, res, next) => {
             message: "Assuree deleted successfully",
         });
     } catch (err) {
-        res.status(200).json({
+        res.status(400).json({
+            success: false,
+            message: err.errmsg,
+        });
+    }
+
+};
+
+exports.uploadPhoto = async(req, res, next) => {
+    try {
+        console.log('this is my picture');
+    } catch (err) {
+        res.status(400).json({
             success: false,
             message: err.errmsg,
         });
