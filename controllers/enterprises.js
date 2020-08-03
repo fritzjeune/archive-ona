@@ -8,7 +8,7 @@ const Enterprises = require('../models/Enterprises');
 // @access      Public
 exports.getEnterprises = async (req, res, next) => {
     try {
-        const enterprises = await Enterprises.find().populate('assurees');
+        const enterprises = await Enterprises.find().populate({path: 'assurees', select: "nif surname lastname sexe"});
 
         console.log(enterprises);
     
@@ -34,7 +34,7 @@ exports.getEnterprise = async (req, res, next) => {
     try {
 
         const id = req.params.enterpriseId;
-        const enterprise = await Enterprises.findOne({nif : id}).populate('assurees');
+        const enterprise = await Enterprises.findOne({nif : id}).populate({path: 'assurees', select: "nif surname lastname sexe"});
 
         if (!enterprise) {
             return res.status(404).json({

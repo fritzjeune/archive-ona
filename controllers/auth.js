@@ -1,6 +1,5 @@
 // jshint esversion:9
 const User = require('../models/Users');
-const Family = require('../models/Family');
 const bcrypt = require('bcrypt');
 
 // @descr       create a family member for an assuree
