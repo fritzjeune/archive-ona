@@ -12,6 +12,7 @@ connectDB();
 // routes files 
 const assurees = require('./routes/assurees');
 const enterprises = require('./routes/enterprises');
+// const statusScanned = require('./routes/statusScanned');
 const works = require('./routes/works');
 const requestforms = require('./routes/requestforms');
 const auth = require('./routes/auth');

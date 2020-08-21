@@ -38,7 +38,6 @@ exports.getAssuree = async(req, res, next) => {
         const assuree = await Assuree.find(req.params).populate({path: 'enterprise', select:'nif businessName businessCategory'}).
         populate('works').
         populate('family');
-        
         if (!assuree) {
             return res.status(404).json({
                 success: false,
