@@ -1,8 +1,8 @@
 // jshint esversion:9
 
 const mongoose = require('mongoose');
-const Assuree = require('./assurees');
-const Enterprise = require('./enterprises');
+const Assuree = require('./Assurees');
+const Enterprise = require('./Enterprises');
 
 const workSchema = new mongoose.Schema({
     assuree: {

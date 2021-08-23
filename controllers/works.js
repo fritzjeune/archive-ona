@@ -1,5 +1,5 @@
 // jshint esversion:9
-const Work = require('../models/works');
+const Work = require('../models/Works');
 const Assuree = require('../models/Assurees');
 const Enterprise = require('../models/Enterprises');
 
